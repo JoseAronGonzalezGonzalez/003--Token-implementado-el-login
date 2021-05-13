@@ -16,8 +16,8 @@
   * Ruta para un nuevo usuario
   */
  User.post("/sign-up", async (req, res) => {
-   let { email, password } = req.body;
-   const { status, response } = await Services.signUp(email, password);
+   let { nombre,apellidos,email, password,edad } = req.body;
+   const { status, response } = await Services.signUp(nombre,apellidos,email, password,edad);
    res.status(status).json(response);
  });
 
@@ -33,7 +33,7 @@
 
  User.post("/ruta-secreta", Middleware, (req, res) => {
 	res.status(200).json({
-		hola: "hi",
+		nombre: req.body.nombre,
 		data: req.jwtData
 	})
 });

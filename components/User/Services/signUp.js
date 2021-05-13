@@ -3,11 +3,14 @@ const { hashPassword, generateJwt } = require("../../../libs/utils");
 
 /**
  * crea un nuevo usuario
+ * @param {string} nombre
+ * @param {string} apellidos
  * @param {string} email
  * @param {string} password
+ * @param {int} edad
  * @returns {object} {status: int, response: object}
  */
-const signUp = async (email, password) => {
+const signUp = async (nombre,apellidos,email, password,edad) => {
   let response = {};
   let status = 500;
   let duplicateUsers = null;
@@ -48,13 +51,15 @@ const signUp = async (email, password) => {
   if (duplicateUsers?.length === 0) {
     try {
       const result = await Dal.query(
-        "INSERT INTO users (email, password) VALUES (?, ?)",
-        [email, hashPassword(password)]
+        "INSERT INTO users (nombre,apellidos,email, password,edad) VALUES (?, ?, ?, ?, ?)",
+        [nombre,apellidos,email, hashPassword(password),edad]
       );
       response = {
         message: "Registro de usuario realizado correctamente.",
         data: {
           id: result.insertId,
+          nombre: nombre,
+          apellidos: apellidos,
           email: email,
           token: generateJwt({
             id: result.insertId,
